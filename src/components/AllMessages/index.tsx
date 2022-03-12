@@ -1,16 +1,20 @@
 import { useEffect } from "react"
-import { fetchMessages } from "../../index"
 import { useDispatch, useSelector } from "react-redux"
 import { css } from "@emotion/css"
 import { Message } from "../Message"
 import { MessagesFallback } from "../MessagesFallback"
+import { fetchMessages } from "../../actions"
 
 export function AllMessages() {
   const dispatch = useDispatch()
   const messages = useSelector((state: any) => state.messages)
   useEffect(() => {
-    dispatch(fetchMessages)
+    const interval = setInterval(() => {
+      dispatch(fetchMessages)
+    }, 1000)
+    return () => clearInterval(interval)
   }, [dispatch])
+
   const loadingMessages = useSelector(
     (state: { messages: { loading: any } }) => state.messages.loading
   )
@@ -21,7 +25,7 @@ export function AllMessages() {
         {!loadingMessages ? (
           latestMessages.length ? (
             latestMessages.map((message: any, idx: number) => (
-              <Message message={message} />
+              <Message key={idx} message={message} />
             ))
           ) : (
             <Message message={{ body: "No messages" }} />

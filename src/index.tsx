@@ -6,58 +6,7 @@ import reportWebVitals from "./reportWebVitals"
 import reduxThunk from "redux-thunk"
 import { Provider } from "react-redux"
 import { applyMiddleware, combineReducers, createStore } from "redux"
-
-const initialState = {
-  messages: [],
-  loading: false,
-}
-
-const reducer = (
-  state = initialState,
-  action: { type: string; payload: any }
-) => {
-  switch (action.type) {
-    case "MESSAGES_LOADED":
-      return {
-        ...state,
-        messages: action.payload,
-        loading: false,
-      }
-    case "SUBMIT":
-      return {
-        ...state,
-        username: action.payload.username,
-        body: action.payload.body,
-      }
-    case "LOADING_MESSAGES":
-      return { ...state, loading: true }
-
-    default:
-      return state
-  }
-}
-
-// Sample action :
-export const submitValues = (value: any) => ({
-  type: "SUBMIT",
-  payload: value || {},
-})
-
-export const fetchMessages = (
-  dispatch: (arg0: { type: string; payload?: any }) => void
-) => {
-  dispatch({ type: "LOADING_MESSAGES" })
-  const messages = JSON.parse(localStorage.getItem("messages") || "[]")
-  const slicedArray = messages
-    .slice(messages.length - 10, messages.length)
-    .reverse()
-  setTimeout(() => {
-    dispatch({
-      type: "MESSAGES_LOADED",
-      payload: slicedArray || [],
-    })
-  }, 1000)
-}
+import { reducer } from "./reducers"
 
 const store = createStore(
   combineReducers({ messages: reducer }),

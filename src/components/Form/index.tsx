@@ -1,7 +1,7 @@
-import { css } from "@emotion/css"
+import { css, cx } from "@emotion/css"
 import { useState } from "react"
 import { useDispatch } from "react-redux"
-import { submitValues } from "../../index"
+import { submitValues } from "../../actions"
 
 export function Form() {
   const dispatch = useDispatch()
@@ -9,31 +9,19 @@ export function Form() {
   const [messageValue, setMessageValue] = useState<any>({})
 
   const previousMessages = JSON.parse(localStorage.getItem("messages") || "{}")
-
   const handleSubmit = () => {
-    if (
-      messageValue.username.trim() === "" ||
-      messageValue.body.trim() === "" ||
-      Object.keys(messageValue).length === 0
-    ) {
-      console.error("empty message")
-      return
-    }
     if (!previousMessages.length) {
       localStorage.setItem("messages", JSON.stringify([messageValue]))
       dispatch(submitValues({ type: "SUBMIT", payload: { ...messageValue } }))
-      setMessageValue({})
-      window.location.reload()
+      setMessageValue({ username: "", body: "" })
       return
     }
-
     dispatch(submitValues({ type: "SUBMIT", payload: { ...messageValue } }))
     localStorage.setItem(
       "messages",
       JSON.stringify([...previousMessages, messageValue])
     )
-    setMessageValue({})
-    window.location.reload()
+    setMessageValue({ username: "", body: "" })
   }
 
   const handleUsernameChange = (e: { target: { value: any } }) => {
@@ -42,14 +30,25 @@ export function Form() {
   const handleBodyChange = (e: { target: { value: any } }) => {
     setMessageValue({ username: messageValue.username, body: e.target.value })
   }
-
+  const isNotValid = (field: { username?: any; body?: any }) => {
+    if (
+      field?.username?.trim() === "" ||
+      !field?.username ||
+      field?.body?.trim() === "" ||
+      !field?.body ||
+      Object.keys(field)?.length === 0
+    ) {
+      return true
+    }
+  }
   return (
-    <div className={styles.container}>
+    <form className={styles.container}>
       <input
         type="text"
         name="username"
         placeholder="Username"
         className="field"
+        value={messageValue.username || ""}
         onChange={handleUsernameChange}
       />
       <input
@@ -57,12 +56,22 @@ export function Form() {
         name="body"
         placeholder="Message"
         className="body"
+        value={messageValue.body || ""}
         onChange={handleBodyChange}
       />
-      <div className={styles.button} onClick={handleSubmit}>
+      <button
+        className={cx(
+          styles.button,
+          isNotValid(messageValue) ? "disabled" : ""
+        )}
+        onClick={handleSubmit}
+        disabled={isNotValid(messageValue)}
+        onKeyPress={(e) => e.key === "Enter" && handleSubmit}
+        type="submit"
+      >
         <span className={styles.buttonText}>Send</span>
-      </div>
-    </div>
+      </button>
+    </form>
   )
 }
 
@@ -92,12 +101,11 @@ const styles = {
     input[type="text"],
     select {
       transition: outline 0.6s linear;
-
+      font-size: 18px;
       :hover {
         border: solid 1px var(--header);
       }
       width: 400px;
-
       @media (max-width: 1280px) {
         width: 300px;
       }
@@ -121,7 +129,11 @@ const styles = {
     border: 1px solid var(--header);
     background-color: rgba(255, 255, 255, 0.3);
     transition: 0.3s all;
-
+    &.disabled {
+      pointer-events: none;
+      border: 1px solid var(--lightgray);
+      opacity: 0.5;
+    }
     &:hover {
       background-color: var(--header);
       span:nth-child(1) {
