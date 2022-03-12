@@ -9,7 +9,6 @@ function App() {
     <Layout>
       <div className={styles.container}>
         <div className={styles.section}>
-
         <div className={styles.formContainer}>
           <Form />
         </div>
@@ -39,9 +38,9 @@ const styles = {
   section: css`
     display: flex;
     flex-direction: row;
-    gap: var(--spacing-m);
-    margin: var(--spacing-xxl-2) auto;
-    padding: var(--spacing-m);
+    gap: 16px;
+    margin: 32px auto;
+    padding: 16px;
 
     &:before {
       content: "";
