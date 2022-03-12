@@ -8,8 +8,9 @@ function Layout(props: LayoutProps) {
   return (
     <div className={styles.container}>
       <Header>
-        <h1>hi
-        </h1>
+        <div className={styles.chatRoom}>
+          Chat Room
+        </div>
       </Header>
       <div className={styles.root}>
         <main className={styles.content}>{children}</main>
@@ -35,6 +36,11 @@ const styles = {
   content: css`
     width: 100%;
     height: 100%;
+  `,
+  chatRoom: css`
+   color: var(--white);
+    margin-left: 20px;
+    font-weight: bold;
   `,
 }
 
