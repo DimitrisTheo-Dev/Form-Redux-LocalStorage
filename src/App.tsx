@@ -9,10 +9,12 @@ function App() {
     <Layout>
       <div className={styles.container}>
         <div className={styles.section}>
-        <div className={styles.formContainer}>
-          <Form />
-        </div>
-        <div className={styles.allMessagesContainer}><AllMessages /></div>
+          <div className={styles.formContainer}>
+            <Form />
+          </div>
+          <div className={styles.allMessagesContainer}>
+            <AllMessages />
+          </div>
         </div>
       </div>
     </Layout>
@@ -38,6 +40,7 @@ const styles = {
   section: css`
     display: flex;
     flex-direction: row;
+    align-items: flex-start;
     gap: 16px;
     margin: 32px auto;
     padding: 16px;

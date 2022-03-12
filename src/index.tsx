@@ -12,8 +12,10 @@ const initialState = {
   loading: false,
 }
 
-const reducer = (state = initialState, action: { type: string; payload: any; }) => {
-  console.log(action, "REDUCER 1")
+const reducer = (
+  state = initialState,
+  action: { type: string; payload: any }
+) => {
   switch (action.type) {
     case "MESSAGES_LOADED":
       return {
@@ -36,24 +38,31 @@ const reducer = (state = initialState, action: { type: string; payload: any; }) 
 }
 
 // Sample action :
-export const submitValues = (value: any) => ({ type: "SUBMIT", payload: value || {} })
+export const submitValues = (value: any) => ({
+  type: "SUBMIT",
+  payload: value || {},
+})
 
-export const fetchMessages = (dispatch: (arg0: { type: string; payload?: any; }) => void) => {
+export const fetchMessages = (
+  dispatch: (arg0: { type: string; payload?: any }) => void
+) => {
   dispatch({ type: "LOADING_MESSAGES" })
-  const messages = JSON.parse(localStorage.getItem("messages") || "[]");
+  const messages = JSON.parse(localStorage.getItem("messages") || "[]")
+  const slicedArray = messages
+    .slice(messages.length - 10, messages.length)
+    .reverse()
   setTimeout(() => {
     dispatch({
       type: "MESSAGES_LOADED",
-      payload:  messages || [],
+      payload: slicedArray || [],
     })
   }, 1000)
 }
 
 const store = createStore(
   combineReducers({ messages: reducer }),
-  applyMiddleware(reduxThunk),
+  applyMiddleware(reduxThunk)
 )
-
 
 ReactDOM.render(
   <React.StrictMode>
@@ -61,7 +70,7 @@ ReactDOM.render(
       <App />
     </Provider>
   </React.StrictMode>,
-  document.getElementById("root"),
+  document.getElementById("root")
 )
 
 // If you want to start measuring performance in your app, pass a function

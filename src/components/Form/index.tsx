@@ -1,28 +1,23 @@
 import { css } from "@emotion/css"
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
-import {
-
-  submitValues,
-} from "../../index"
+import { submitValues } from "../../index"
 
 export function Form() {
   const dispatch = useDispatch()
-  const loadingMessages = useSelector((state: { messages: { loading: any; }; }) => state.messages.loading)
+  const loadingMessages = useSelector(
+    (state: { messages: { loading: any } }) => state.messages.loading
+  )
   const [messageValue, setMessageValue] = useState<any>({})
-  useEffect(() => {
-    const messages = localStorage.getItem("messages")
-    if (messages) {
-      setMessageValue(JSON.parse(messages))
-    }
-  }, [])
 
   const previousMessages = JSON.parse(localStorage.getItem("messages") || "{}")
-  console.log(previousMessages)
-
 
   const handleSubmit = () => {
-    if (Object.keys(messageValue).length === 0) {
+    if (
+      messageValue.username.trim() === "" ||
+      messageValue.body.trim() === "" ||
+      Object.keys(messageValue).length === 0
+    ) {
       console.error("empty message")
       return
     }
@@ -37,17 +32,16 @@ export function Form() {
     dispatch(submitValues({ type: "SUBMIT", payload: { ...messageValue } }))
     localStorage.setItem(
       "messages",
-      JSON.stringify([...previousMessages, messageValue]),
+      JSON.stringify([...previousMessages, messageValue])
     )
     setMessageValue({})
     window.location.reload()
   }
 
-
-  const handleUsernameChange = (e: { target: { value: any; }; }) => {
+  const handleUsernameChange = (e: { target: { value: any } }) => {
     setMessageValue({ username: e.target.value, body: messageValue.body })
   }
-  const handleBodyChange = (e: { target: { value: any; }; }) => {
+  const handleBodyChange = (e: { target: { value: any } }) => {
     setMessageValue({ username: messageValue.username, body: e.target.value })
   }
   if (loadingMessages) {
@@ -67,51 +61,64 @@ export function Form() {
         type="text"
         name="body"
         placeholder="Message"
-        className="field"
+        className="body"
         onChange={handleBodyChange}
       />
       <div className={styles.button} onClick={handleSubmit}>
-        <span className={styles.buttonText}>
-          Send
-        </span>
+        <span className={styles.buttonText}>Send</span>
       </div>
     </div>
   )
-
 }
 
 const styles = {
-
   container: css`
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    margin-right: 30px;
+    padding: 50px;
 
     .field {
       width: 100%;
-      height: 56px;
+      height: 58px;
       border-radius: 4px;
       position: relative;
       background-color: rgba(255, 255, 255, 0.3);
       transition: 0.3s all;
       outline: none;
     }
+    .body {
+      height: 120px;
+      background-color: rgba(255, 255, 255, 0.4);
+      transition: 0.3s all;
+      outline: none;
+    }
+    input[type="text"],
+    select {
+      transition: outline 0.6s linear;
 
-    input[type=text], select {
-      width: 100%;
-      padding: 12px 20px;
+      :hover {
+        border: solid 1px var(--header);
+      }
+      width: 400px;
+
+      @media (max-width: 1280px) {
+        width: 300px;
+      }
+      padding: 22px 25px;
       margin: 8px 10px;
       display: inline-block;
       border: 1px solid var(--lightgray);
       border-radius: 4px;
       box-sizing: border-box;
     }
-
   `,
   button: css`
-    width: 100%;
+    @media (max-width: 1280px) {
+      width: 300px;
+    }
+    width: 400px;
     height: 56px;
     cursor: pointer;
     border-radius: 4px;
@@ -122,8 +129,8 @@ const styles = {
 
     &:hover {
       background-color: var(--header);
-        span:nth-child(1) {
-          color: var(--white);
+      span:nth-child(1) {
+        color: var(--white);
       }
     }
   `,
@@ -135,5 +142,4 @@ const styles = {
     text-align: center;
     line-height: 56px;
   `,
-
 }
