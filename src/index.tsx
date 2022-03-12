@@ -29,7 +29,7 @@ const reducer = (
         username: action.payload.username,
         body: action.payload.body,
       }
-    case "LOADING_TODOS":
+    case "LOADING_MESSAGES":
       return { ...state, loading: true }
 
     default:

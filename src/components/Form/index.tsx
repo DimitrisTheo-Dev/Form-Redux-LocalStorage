@@ -1,13 +1,11 @@
 import { css } from "@emotion/css"
 import { useState } from "react"
-import { useDispatch, useSelector } from "react-redux"
+import { useDispatch } from "react-redux"
 import { submitValues } from "../../index"
 
 export function Form() {
   const dispatch = useDispatch()
-  const loadingMessages = useSelector(
-    (state: { messages: { loading: any } }) => state.messages.loading
-  )
+
   const [messageValue, setMessageValue] = useState<any>({})
 
   const previousMessages = JSON.parse(localStorage.getItem("messages") || "{}")
@@ -43,9 +41,6 @@ export function Form() {
   }
   const handleBodyChange = (e: { target: { value: any } }) => {
     setMessageValue({ username: messageValue.username, body: e.target.value })
-  }
-  if (loadingMessages) {
-    return <p>loading...</p>
   }
 
   return (
