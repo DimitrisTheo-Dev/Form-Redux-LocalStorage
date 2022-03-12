@@ -44,6 +44,7 @@ export function Form() {
   return (
     <form className={styles.container}>
       <input
+        data-testid="username-input"
         type="text"
         name="username"
         placeholder="Username"
@@ -52,6 +53,7 @@ export function Form() {
         onChange={handleUsernameChange}
       />
       <input
+        data-testid="body-input"
         type="text"
         name="body"
         placeholder="Message"
@@ -60,6 +62,7 @@ export function Form() {
         onChange={handleBodyChange}
       />
       <button
+        data-testid="submit-button"
         className={cx(
           styles.button,
           isNotValid(messageValue) ? "disabled" : ""

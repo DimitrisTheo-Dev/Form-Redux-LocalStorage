@@ -1,0 +1,38 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Form should render 1`] = `
+<DocumentFragment>
+  <form
+    class="css-vosf0u"
+  >
+    <input
+      class="field"
+      data-testid="username-input"
+      name="username"
+      placeholder="Username"
+      type="text"
+      value=""
+    />
+    <input
+      class="body"
+      data-testid="body-input"
+      name="body"
+      placeholder="Message"
+      type="text"
+      value=""
+    />
+    <button
+      class="css-jcjqud disabled"
+      data-testid="submit-button"
+      disabled=""
+      type="submit"
+    >
+      <span
+        class="css-1ybyu7c"
+      >
+        Send
+      </span>
+    </button>
+  </form>
+</DocumentFragment>
+`;
